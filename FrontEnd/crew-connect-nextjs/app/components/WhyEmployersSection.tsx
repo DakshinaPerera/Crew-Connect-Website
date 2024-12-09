@@ -1,4 +1,5 @@
 import React from 'react';
+import BasicButton from './button';
 
 const WhyEmployersSection = () => {
   const features = [
@@ -33,20 +34,22 @@ const WhyEmployersSection = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row items-center">
           {/* Left Column */}
-          <div className="w-full lg:w-2/5 pr-8 mb-8 lg:mb-0 flex flex-col items-center justify-center"> 
+          <div className="w-full lg:w-2/5 pr-8 mb-8 lg:mb-0 flex flex-col items-center justify-center">
             <div className="relative mb-8 overflow-hidden rounded-lg">
               <img
                 src="/images/home_employers_cropped.png"
                 alt="Employers discussing work"
-                className="w-[400px] rounded-lg object-cover h-[320px] object-center" 
+                className="w-[400px] rounded-lg object-cover h-[320px] object-center"
               />
             </div>
             <h2 className="mb-6 text-4xl font-bold text-white text-center">
-              Why Employers Choose <br/> Crew Connect
+              Why Employers Choose <br /> Crew Connect
             </h2>
-            <button className="w-fit rounded-md bg-secondary px-6 py-3 text-white transition-colors hover:bg-[#0077b6]">
-              Post a Job
-            </button>
+            <BasicButton
+              href="/employers"
+              title="Post for Job"
+              className="w-[180px]"
+            />
           </div>
 
           {/* Right Column */}
