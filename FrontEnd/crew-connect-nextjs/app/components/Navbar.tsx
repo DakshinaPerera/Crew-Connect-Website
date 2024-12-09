@@ -36,7 +36,7 @@ const Navbar = () => {
                 </Link>
                 
                 <Link  href="/">
-                  <button className="  mx-2 bg-slate-950  hover:bg-slate-800 text-white  rounded-full px-4 py-2 font-semibold ">+62518135</button> 
+                  <button className="  mx-2 bg-slate-950  hover:bg-slate-800 text-white  rounded-full px-4 py-2 font-semibold ">+61 03 0000 1111</button> 
                 </Link>
             </div>
             <div className="md:hidden flex items-center">
