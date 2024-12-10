@@ -1,14 +1,31 @@
 'use client';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 interface JobCategoryCardProps {
   title: string;
   imageUrl: string;
+  category: string;
 }
 
-const JobCategoryCard: React.FC<JobCategoryCardProps> = ({ title, imageUrl }) => {
+const JobCategoryCard: React.FC<JobCategoryCardProps> = ({ 
+  title, 
+  imageUrl, 
+  category 
+}) => {
+  const router = useRouter();
+
+  const handleCardClick = () => {
+    // Navigate to the available jobs page with the specific category
+    // router.push(`/jobs?category=${encodeURIComponent(category)}`);
+    router.push(`${category}`);
+  };
+
   return (
-    <div className="relative h-[500px] w-[330px] mx-auto overflow-hidden rounded-lg transition-transform duration-300 hover:scale-105 hover:shadow-xl cursor-pointer">
+    <div 
+      onClick={handleCardClick}
+      className="relative h-[500px] w-[330px] mx-auto overflow-hidden rounded-lg transition-transform duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
+    >
       <img
         src={imageUrl}
         alt={title}

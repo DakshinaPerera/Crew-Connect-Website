@@ -4,14 +4,17 @@ const categories = [
   {
     title: 'Logistics',
     imageUrl: '/images/logistics_card.png',
+    category: '/availablejobs',
   },
   {
     title: 'Warehousing',
     imageUrl: '/images/warehousing_card.png',
+    category: '/availablejobs',
   },
   {
     title: 'Manufacturing',
     imageUrl: '/images/manufacturing_card.png',
+    category: '/availablejobs',
   },
 ];
 
@@ -43,6 +46,7 @@ const CatalogSection = () => {
               key={category.title}
               title={category.title}
               imageUrl={category.imageUrl}
+              category={category.category}
             />
           ))}
         </div>
