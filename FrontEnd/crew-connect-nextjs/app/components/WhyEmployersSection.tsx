@@ -34,7 +34,7 @@ const WhyEmployersSection = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row items-center">
           {/* Left Column */}
-          <div className="w-full lg:w-2/5 pr-8 mb-8 lg:mb-0 flex flex-col items-center justify-center">
+          <div className="w-full lg:w-2/5 px-4 mb-8 lg:mb-0 flex flex-col items-center justify-center">
             <div className="relative mb-8 overflow-hidden rounded-lg">
               <img
                 src="/images/home_employers_cropped.png"
