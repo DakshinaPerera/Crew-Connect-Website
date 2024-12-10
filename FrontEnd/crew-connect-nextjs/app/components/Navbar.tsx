@@ -45,7 +45,7 @@ const Navbar = () => {
                 </button>
             </div>
             <div className={isOpen 
-                ? "fixed left-0 top-0 w-[100%] md:hidden h-[75%] bg-[#ffffff] p10 ease-in duration-500" 
+                ? "fixed left-0 top-0 w-[100%] md:hidden h-auto bg-[#ffffff] p10 ease-in duration-500" 
                 : "fixed left-[-100%] top-0 p-10 ease-in duration-500"}>
             <div className="flex w-full items-center px-4 pt-4 pb-2 justify-between">
                 <Link href="/" >
@@ -82,7 +82,7 @@ const Navbar = () => {
                         <li onClick = {()=>{setIsOpen(!isOpen)} } className='py-4 px-6 cursor-pointer  hover:text-gray-500 font-semibold text-sm'>Contact Us</li>
                      </Link>
                      <Link  href="/">
-                        <button onClick = {()=>{setIsOpen(!isOpen)} } className="  my-2 mx-2 bg-slate-950  hover:bg-slate-800 text-white  rounded-full px-6 py-2 font-semibold cursor-pointer">+62518135</button> 
+                        <button onClick = {()=>{setIsOpen(!isOpen)} } className="  my-2 mx-2 bg-slate-950  hover:bg-slate-800 text-white  rounded-full px-6 py-2 font-semibold cursor-pointer">+61 03 0000 1111</button> 
                      </Link>
                 </ul>
             </div>
