@@ -209,7 +209,7 @@ const Page = () => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-[#393E46] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                   {errors.firstName && (
@@ -228,7 +228,7 @@ const Page = () => {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-[#393E46] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                   {errors.lastName && (
@@ -249,7 +249,7 @@ const Page = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-[#393E46] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                   {errors.email && (
@@ -269,7 +269,7 @@ const Page = () => {
                     value={formData.mobileNumber}
                     onChange={handleInputChange}
                     placeholder="+1 (123) 456-7890"
-                    className="w-full p-2 border border-[#393E46] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                   {errors.mobileNumber && (
@@ -289,7 +289,7 @@ const Page = () => {
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-[#393E46] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -303,7 +303,7 @@ const Page = () => {
                     name="residentialStatus"
                     value={formData.residentialStatus}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-[#393E46] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   >
                     <option value="">Select status</option>
@@ -324,7 +324,7 @@ const Page = () => {
                       type="file"
                       accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                       onChange={(e) => handleFileChange(e, 'passportDocument')}
-                      className="w-full p-1.5 border border-[#393E46] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-1.5 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                       required
                     />
                     {errors.passportDocument && (
@@ -342,7 +342,7 @@ const Page = () => {
                       type="file"
                       accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                       onChange={(e) => handleFileChange(e, 'visaGrantNotice')}
-                      className="w-full p-1.5 border border-[#393E46] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-1.5 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                       required
                     />
                     {errors.visaGrantNotice && (
@@ -364,7 +364,7 @@ const Page = () => {
                     name="preferredIndustry"
                     value={formData.preferredIndustry}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-[#393E46] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -378,7 +378,7 @@ const Page = () => {
                     name="preferredJobs"
                     value={formData.preferredJobs}
                     onChange={handleInputChange}
-                    className="w-full p-2 border border-[#393E46] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -392,7 +392,7 @@ const Page = () => {
                   type="file"
                   accept=".docx,.pdf,.doc,.jpg,.jpeg,.png"
                   onChange={(e) => handleFileChange(e, 'resume')}
-                  className="w-full p-1.5 border border-[#393E46] rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-1.5 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
                 {errors.resume && (
@@ -402,10 +402,10 @@ const Page = () => {
                 )}
               </div>
 
-              <div className="flex justify-center mt-6">
+              <div className="flex justify-center mt-8 pt-4">
                 <button
                   type="submit"
-                  className="bg-[#0a192f] text-white px-6 py-2 rounded hover:bg-[#112a45] transition-colors duration-300"
+                  className="bg-[#0a192f] text-white px-6 py-4 rounded hover:bg-[#112a45] transition-colors duration-300"
                 >
                   View more & Apply
                 </button>
