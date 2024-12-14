@@ -20,7 +20,7 @@ const ContactUsForm = () => {
             <input 
                 type="text" 
                 placeholder="Name" 
-                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 {...register("name", {required: true})}            
             />
         </div>
@@ -28,7 +28,7 @@ const ContactUsForm = () => {
             <input 
                 type="email" 
                 placeholder="Email" 
-                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 {...register("email", {required: true})} 
             />
         </div>
@@ -36,7 +36,7 @@ const ContactUsForm = () => {
             <input 
                 type="text" 
                 placeholder="Subject" 
-                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 {...register("subject", {required: true})} 
             />
         </div>
@@ -44,7 +44,7 @@ const ContactUsForm = () => {
             <textarea 
                 placeholder="Message" 
                 rows={8}
-                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 {...register("message", {required: true})} 
             ></textarea>
         </div>

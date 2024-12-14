@@ -414,6 +414,7 @@ const Page = () => {
           </div>
         </div>
       </div>
+      <div className="w-full h-[0px] border border-white"></div>
     </main>
   )
 }

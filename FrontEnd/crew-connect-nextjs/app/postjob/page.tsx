@@ -76,7 +76,8 @@ const page = () => {
         <div className="w-full min-h-screen flex items-center justify-center p-4">
           <div className="bg-gray-100 rounded-lg p-8 w-full max-w-2xl shadow-lg">
             <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-              Job Seeker Registration
+               Get started with Crew Connect
+               <p className="text-sm font-semibold text-gray-800 pt-5 text-center">Create descriptive job selections and attract your ideal work force with each post!</p>
             </h1>
             
             <form onSubmit={handleSubmit} className="space-y-4">
