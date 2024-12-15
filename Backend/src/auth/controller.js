@@ -1,4 +1,4 @@
-const pool = require('../db'); // Import your database connection pool
+const pool = require('../../db'); 
 const queries = require('./queries');
 
 //Auth
@@ -25,6 +25,6 @@ const adminLoginController = async (req, res) => {
 };
 
 
-//Employee login auth email
+
 
 module.exports = { adminLoginController };
