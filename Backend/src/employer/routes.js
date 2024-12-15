@@ -3,7 +3,11 @@ const controller = require('./controller');
 
 const router = Router();
 
-// Login route
-router.post('/admin/login', controller.adminLoginController);
+router.get('/alljobs', controller.getJobs);
+router.post('/addjob', controller.addJob);
+
+
+
+
 
 module.exports = router;
