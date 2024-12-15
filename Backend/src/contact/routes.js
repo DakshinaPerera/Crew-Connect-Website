@@ -3,7 +3,9 @@ const controller = require('./controller');
 
 const router = Router();
 
-// Login route
-router.post('/admin/login', controller.adminLoginController);
+
+router.post('/sendcontact', controller.sendContactUsEmail);
+
+
 
 module.exports = router;
