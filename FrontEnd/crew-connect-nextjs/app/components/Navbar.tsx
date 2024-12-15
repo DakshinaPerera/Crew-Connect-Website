@@ -7,7 +7,7 @@ import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false)
   return (
-    <nav className='bg-white text-black p-1 sm:p-2  md:flex md:justify-between md:items-center shadow-xl w-full fixed top-0 left-0 z-10'>
+    <nav className='bg-white text-black p-1 sm:p-2  md:flex md:justify-between md:items-center shadow-xl w-full fixed top-0 left-0 z-20'>
         <div className="flex justify-between items-center h-full w-full px-1 2xl:px-2">
             <Link href="/" >
               <Image src={logo}
@@ -35,7 +35,7 @@ const Navbar = () => {
                   Contact Us
                 </Link>
                 
-                <Link  href="/">
+                <Link  href="/contactus">
                   <button className="  mx-2 bg-slate-950  hover:bg-slate-800 text-white  rounded-full px-4 py-2 font-semibold ">+61 03 0000 1111</button> 
                 </Link>
             </div>
@@ -45,8 +45,8 @@ const Navbar = () => {
                 </button>
             </div>
             <div className={isOpen 
-                ? "fixed left-0 top-0 w-[100%] md:hidden h-auto bg-[#ffffff] p10 ease-in duration-500" 
-                : "fixed left-[-100%] top-0 p-10 ease-in duration-500"}>
+                ? "fixed left-0 top-0 w-[100%] md:hidden h-auto bg-[#ffffff] p10 " 
+                : "fixed left-[-100%] top-0 p-10 "}>
             <div className="flex w-full items-center px-4 pt-4 pb-2 justify-between">
                 <Link href="/" >
                         <Image onClick = {()=>{setIsOpen(!isOpen)} } src={logo}
