@@ -1,12 +1,16 @@
-import React from 'react'
+// app/admin/page.tsx
+'use client';
+import ProtectedRoute from '../components/ProtectedRoute';
 
-const page = () => {
-    return (
-        <div>page
-            <h1>Yohohoho</h1>
-        </div>
+const AdminPage = () => {
+  return (
+    <ProtectedRoute>
+      <div>
+        <h1 className="text-2xl mt-[65px]">Admin Dashboard</h1>
+        {/* Your admin content */}
+      </div>
+    </ProtectedRoute>
+  );
+};
 
-    )
-}
-
-export default page
+export default AdminPage;
