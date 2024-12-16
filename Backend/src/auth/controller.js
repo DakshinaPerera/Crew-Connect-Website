@@ -3,15 +3,15 @@ const queries = require('./queries');
 
 //Auth
 const adminLoginController = async (req, res) => {
-  const { username, password } = req.body; 
+  const { admin_username, admin_password } = req.body; 
 
-  if (!username || !password) {
+  if (!admin_username || !admin_password) {
     return res.status(400).json({ message: 'Username and password are required' });
   }
 
   try {
 
-    const result = await pool.query(queries.checkUserQuery, [username, password]);
+    const result = await pool.query(queries.checkUserQuery, [admin_username, admin_password]);
 
     if (result.rows.length > 0) {
       return res.status(200).json({ message: 'Login successful', user: result.rows[0] });
