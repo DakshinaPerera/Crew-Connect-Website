@@ -134,6 +134,8 @@ const editJob = async (req, res) => {
         res.status(500).send("An error occurred while editing the job.");
     }
 };
+
+//Please check this
 const searchJobs = async (req, res) => {
     try {
       const { job_title, job_description, job_type, job_industry} = req.query;
