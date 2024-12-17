@@ -2,9 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
-const jobRoutes = require('./src/job/routes');
+const adminRoutes = require('./src/admin/routes');
 const employerRoutes = require('./src/employer/routes');
 const authRoutes = require('./src/auth/routes');
+const employeeRoutes = require('./src/employee/routes');
 
 const app = express();
 const port = 4500;
@@ -23,8 +24,9 @@ app.get('/', (req,res) => {
     res.send("Hello World!");
 });
 
-app.use('/api/v1/admin/', jobRoutes);
+app.use('/api/v1/admin/', adminRoutes);
 app.use('/api/v1/emp/', employerRoutes);
 app.use('/api/v1/auth/', authRoutes);
+app.use('/api/v1/empe/', employeeRoutes);
 
 app.listen(port, () => console.log(`app listening on port ${port}`));
