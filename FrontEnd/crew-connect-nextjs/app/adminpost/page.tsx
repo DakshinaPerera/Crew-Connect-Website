@@ -1,6 +1,10 @@
 'use client';
 import React, { useState } from 'react'
+import Link from 'next/link';
 import ProtectedRoute from '../components/ProtectedRoute';
+import Image from 'next/image';
+import BackArrow from '/public/images/back_arrow.png';
+
 const page = () => {
   const [formData, setFormData] = useState({
     job_title: '',
@@ -24,7 +28,7 @@ const page = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    
+
     try {
       const response = await fetch('/api/jobs', {
         method: 'POST',
@@ -57,15 +61,43 @@ const page = () => {
   }
 
   return (
-  <ProtectedRoute>
+    <ProtectedRoute>
       <div className="bg-primary flex flex-col lg:flex-row mt-[60px] px-8 items-center justify-between relative overflow-hidden">
-        
+
         <div className="w-full min-h-screen flex items-center justify-center p-4">
-          <div className="bg-gray-100 rounded-lg p-8 w-full max-w-2xl shadow-lg">
+          <div className="bg-gray-100 rounded-lg p-8 w-full max-w-2xl shadow-lg relative">
+            {/* Back to Admin Button - Desktop Version */}
+            <Link
+              href="/admin"
+              className="absolute top-8 left-4 hidden md:flex items-center bg-primary text-white px-3 py-1 rounded-full hover:bg-[#112a45] transition-colors duration-300 shadow-sm text-sm"
+            >
+              <Image
+                src={BackArrow}
+                alt="Back"
+                width={24}
+                height={24}
+                className="mr-1.5"
+              />
+              Back to Admin
+            </Link>
+
+            {/* Mobile Version - Only Arrow */}
+            <Link
+              href="/admin"
+              className="absolute top-4 left-4 md:hidden p-2 bg-primary rounded-full hover:bg-[#112a45] transition-colors duration-300 shadow-sm"
+            >
+              <Image
+                src={BackArrow}
+                alt="Back"
+                width={24}
+                height={24}
+              />
+            </Link>
+
             <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
               Register to CrewConnect
             </h1>
-            
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -192,20 +224,20 @@ const page = () => {
                 />
               </div>
 
-                <div className="flex justify-center mt-6">
-                  <button
-                    type="submit"
-                    className="bg-[#0a192f] text-white px-6 py-2 rounded hover:bg-[#112a45] transition-colors duration-300"
-                  >
-                    Post Job
-                  </button>
-                </div>
-              </form>
-            </div>
+              <div className="flex justify-center mt-6">
+                <button
+                  type="submit"
+                  className="bg-[#0a192f] text-white px-6 py-2 rounded hover:bg-[#112a45] transition-colors duration-300"
+                >
+                  Post Job
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-        <div className="w-full h-[0px] border border-white"></div>
-  </ProtectedRoute>
+      </div>
+      <div className="w-full h-[0px] border border-white"></div>
+    </ProtectedRoute>
   )
 }
 export default page
