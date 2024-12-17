@@ -407,7 +407,7 @@ const Page = () => {
                   type="submit"
                   className="bg-[#0a192f] text-white px-6 py-4 rounded hover:bg-[#112a45] transition-colors duration-300"
                 >
-                  View more & Apply
+                  Register
                 </button>
               </div>
             </form>

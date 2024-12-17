@@ -2,9 +2,11 @@
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from 'react';
 import { checkAuthStatus } from '../utils/api';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const page = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     admin_username: '',
     admin_password: ''
@@ -14,16 +16,19 @@ const page = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
+      setIsLoading(true);
       const isAuthenticated = await checkAuthStatus();
       if (isAuthenticated) {
-        router.replace('/admin'); // Using replace instead of push
+        router.replace('/admin');
       }
+      setIsLoading(false);
     };
     checkAuth();
-  }, []); 
+  }, []);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await fetch('http://localhost:4500/api/v1/auth/login', {
@@ -38,13 +43,15 @@ const page = () => {
       const data = await response.json();
 
       if (response.ok) {
-        router.replace('/admin'); // Using replace instead of push
+        router.replace('/admin');
       } else {
         setLoginError(data.message || 'Login failed');
+        setIsLoading(false);
       }
     } catch (error) {
       console.error('Error during login:', error);
       setLoginError('An error occurred during login');
+      setIsLoading(false);
     }
   };
 
@@ -59,6 +66,7 @@ const page = () => {
 
   return (
     <main>
+      {isLoading && <LoadingSpinner />}
       <div className="bg-primary flex flex-col lg:flex-row mt-[60px] px-8 items-center justify-between relative overflow-hidden">
         <div className="w-full min-h-screen flex items-center justify-center p-4">
           <div className="bg-gray-100 rounded-2xl p-8 w-full max-w-2xl shadow-lg">
