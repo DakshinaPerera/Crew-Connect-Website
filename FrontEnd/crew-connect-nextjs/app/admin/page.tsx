@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import ProtectedRoute from '../components/ProtectedRoute';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ProtectedRoute from '../components/ProtectedRoute';
 import SearchForm from '../components/SearchForm';
 import Link from 'next/link';
 
@@ -55,6 +55,24 @@ export default function Page() {
 
     fetchJobs();
   }, []);
+
+  const handleDelete = async (jobId: number) => {
+    try {
+      const response = await fetch(`/api/jobs/admin/${jobId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete job');
+      }
+
+      // Remove the deleted job from the state
+      setJobs(jobs.filter(job => job.job_id !== jobId));
+    } catch (err) {
+      console.log(err)
+      setError(err instanceof Error ? err.message : 'Failed to delete job');
+    }
+  };
 
   if (error) console.log(error);
 
@@ -115,15 +133,20 @@ export default function Page() {
                 <p className="text-gray-600 mb-2">
                   <span className="font-medium">Salary:</span> ${Number(job.job_rate).toLocaleString()}
                 </p>
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 text-sm mb-4">
                   <span className="font-medium">Contact:</span> {job.company_email}
                 </p>
+                <button
+                  onClick={() => handleDelete(job.job_id)}
+                  className="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition-colors duration-300"
+                >
+                  Delete Job
+                </button>
               </div>
             </div>
           ))}
         </div>
       </div>
     </ProtectedRoute>
-
   );
 }
