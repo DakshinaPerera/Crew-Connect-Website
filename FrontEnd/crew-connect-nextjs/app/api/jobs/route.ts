@@ -1,4 +1,3 @@
-// app/api/jobs/route.ts
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -20,6 +19,7 @@ export async function GET() {
     );
   }
 }
+
 
 export async function POST(request: Request) {
     try {
@@ -55,3 +55,5 @@ export async function POST(request: Request) {
       );
     }
 }
+
+

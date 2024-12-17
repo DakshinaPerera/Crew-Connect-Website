@@ -16,7 +16,9 @@ const page = () => {
     company_name: '',
     company_number: '',
     company_email: '',
+
   })
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -169,6 +171,7 @@ const page = () => {
                 />
               </div>
 
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Job Type (Eg: Full-Time, Part-Time)
@@ -182,6 +185,7 @@ const page = () => {
                   required
                 />
               </div>
+
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
