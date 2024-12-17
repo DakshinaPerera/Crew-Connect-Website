@@ -14,44 +14,80 @@ const page = () => {
     jobDescription: ''
   })
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({
     phoneNumber: ''
-  })
+  });
 
   const validatePhoneNumber = (phone: string) => {
-    // Remove any non-digit characters
-    const cleanedPhone = phone.replace(/\D/g, '')
-    
-    // Check if the cleaned phone number is between 10-15 digits
+    const cleanedPhone = phone.replace(/\D/g, '');
     if (cleanedPhone.length < 10 || cleanedPhone.length > 15) {
-      return 'Please enter a valid phone number'
+      return 'Please enter a valid phone number';
     }
-    
-    return ''
+    return '';
+  };
+
+// postjob.tsx
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  
+  const phoneError = validatePhoneNumber(formData.phoneNumber);
+  
+  if (phoneError) {
+    setErrors(prev => ({
+      ...prev,
+      phoneNumber: phoneError
+    }));
+    return;
   }
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault()
+  setErrors({
+    phoneNumber: ''
+  });
+
+  try {
+    setIsSubmitting(true);
     
-    // Validate phone number
-    const phoneError = validatePhoneNumber(formData.phoneNumber)
-    
-    if (phoneError) {
-      setErrors(prev => ({
-        ...prev,
-        phoneNumber: phoneError
-      }))
-      return
+    const response = await fetch('/api/employer/postjob', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to post job');
     }
 
-    // Clear any previous errors
-    setErrors({
-      phoneNumber: ''
-    })
+    // Reset form
+    setFormData({
+      fullName: '',
+      workEmail: '',
+      phoneNumber: '',
+      companyName: '',
+      jobIndustry: '',
+      jobType: '',
+      jobLocation: '',
+      salary: '',
+      jobDescription: ''
+    });
 
-    // Handle form submission logic here
-    console.log('Form submitted', formData)
+    alert(data.message || 'Job posted successfully!');
+    
+  } catch (error: unknown) {
+    console.error('Error submitting form:', error);
+    if (error instanceof Error) {
+      alert(error.message);
+    } else {
+      alert('Failed to post job. Please try again.');
+    }
+  } finally {
+    setIsSubmitting(false);
   }
+};
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -72,14 +108,14 @@ const page = () => {
   return (
     <main>
       <div className="bg-primary flex flex-col lg:flex-row mt-[60px] px-8 items-center justify-between relative overflow-hidden">
-        
+
         <div className="w-full min-h-screen flex items-center justify-center p-4">
           <div className="bg-gray-100 rounded-lg p-8 w-full max-w-2xl shadow-lg">
             <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-               Get started with Crew Connect
-               <p className="text-sm font-semibold text-gray-800 pt-5 text-center">Create descriptive job selections and attract your ideal work force with each post!</p>
+              Get started with Crew Connect
+              <p className="text-sm font-semibold text-gray-800 pt-5 text-center">Create descriptive job selections and attract your ideal work force with each post!</p>
             </h1>
-            
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
