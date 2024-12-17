@@ -1,17 +1,26 @@
 'use client';
 import { useRouter } from "next/navigation";
-import React, { useState } from 'react'
-
+import React, { useState, useEffect } from 'react';
+import { checkAuthStatus } from '../utils/api';
 
 const page = () => {
   const router = useRouter();
-
   const [formData, setFormData] = useState({
     admin_username: '',
     admin_password: ''
   });
 
   const [loginError, setLoginError] = useState('');
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const isAuthenticated = await checkAuthStatus();
+      if (isAuthenticated) {
+        router.replace('/admin'); // Using replace instead of push
+      }
+    };
+    checkAuth();
+  }, []); 
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -22,17 +31,16 @@ const page = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // Important for cookies
+        credentials: 'include',
         body: JSON.stringify(formData)
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        console.log('Login successful:', data);
-        router.push('/admin');
+        router.replace('/admin'); // Using replace instead of push
       } else {
-        setLoginError(data.message);
+        setLoginError(data.message || 'Login failed');
       }
     } catch (error) {
       console.error('Error during login:', error);
@@ -46,15 +54,12 @@ const page = () => {
       ...prevState,
       [name]: value
     }));
-
-    // Clear login error when user modifies credentials
     setLoginError('');
   }
 
   return (
     <main>
       <div className="bg-primary flex flex-col lg:flex-row mt-[60px] px-8 items-center justify-between relative overflow-hidden">
-
         <div className="w-full min-h-screen flex items-center justify-center p-4">
           <div className="bg-gray-100 rounded-2xl p-8 w-full max-w-2xl shadow-lg">
             <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
