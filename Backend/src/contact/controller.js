@@ -16,8 +16,8 @@ const sendContactUsEmail = async (req, res) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'danuja.kowaski@gmail.com', 
-                pass: 'hvxq htpa uhwc vpnk'
+                user: 'danuja.kowaski@gmail.com', //change to company email
+                pass: 'hvxq htpa uhwc vpnk' //change to company email password from app
             }
         });
 

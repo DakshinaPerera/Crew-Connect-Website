@@ -12,7 +12,7 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 const createTokens = (user) => {
     const accessToken = jwt.sign(
         { 
-            id: user.id, 
+            id: user.admin_id, 
             username: user.admin_username, 
             role: 'admin' 
         },
@@ -21,7 +21,7 @@ const createTokens = (user) => {
     );
 
     const refreshToken = jwt.sign(
-        { id: user.id },
+        { id: user.admin_id },
         JWT_REFRESH_SECRET,
         { expiresIn: '7d' }
     );
@@ -62,7 +62,7 @@ const adminLoginController = async (req, res) => {
             return res.status(200).json({
                 message: 'Login successful',
                 user: {
-                    id: user.id,
+                    id: user.admin_id,
                     username: user.admin_username
                 }
             });
