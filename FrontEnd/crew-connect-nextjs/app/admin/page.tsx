@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import ProtectedRoute from '../components/ProtectedRoute';
 import LoadingSpinner from '../components/LoadingSpinner';
+import SearchForm from '../components/SearchForm';
+import Link from 'next/link';
 
 // Define the interface for a job object
 interface Job {
@@ -23,6 +25,16 @@ export default function Page() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const handleSearch = (searchData: {
+    keywords: string;
+    location: string;
+    jobType: string;
+    jobIndustry: string;
+  }) => {
+    // Implement search logic here
+    console.log(searchData);
+  };
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -51,7 +63,20 @@ export default function Page() {
       {loading && <LoadingSpinner />}
       <div className="container mx-auto px-4 py-8">
         <div className="w-full h-[60px] border border-white mb-8"></div>
+        <div className="text-3xl font-bold mb-4 ml-[4rem]">Admin Page</div>
+        <div className="flex justify-between items-center mb-6 mr-[3rem]">
+          {/* Empty div for spacing */}
+          <div></div>
+          {/* Add Job Button */}
+          <Link
+              href="/adminpost"  className="bg-primary text-white text-lg font-semibold px-6 py-2 rounded hover:bg-[#112a45]">
+            Add Job
+          </Link>
+        </div>
 
+        <div className="flex items-center justify-center p-4">
+          <SearchForm onSearch={handleSearch} />
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {jobs.map((job: Job) => (
             <div
@@ -61,8 +86,8 @@ export default function Page() {
               <div className="flex justify-between items-start mb-4">
                 <h2 className="text-xl font-bold text-gray-800">{job.job_title}</h2>
                 <span className={`px-3 py-1 rounded-full text-sm ${job.job_status === 'Open'
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-red-100 text-red-800'
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-red-100 text-red-800'
                   }`}>
                   {job.job_status}
                 </span>
