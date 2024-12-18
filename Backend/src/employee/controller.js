@@ -102,7 +102,70 @@ const uploadEmpDetails = async (req, res) => {
       }
 };
 
+const registerEmployee = async (req, res) => {
+  try {
+      const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+              user: 'danuja.kowaski@gmail.com', 
+              pass: 'hvxq htpa uhwc vpnk'
+          }
+      });
+
+      const { employee_fname, employee_lname, employee_email } = req.body;
+
+      // Check if user already exists
+      
+      const existingUserResult = await pool.query(queries.checkEmployeeExist, [employee_email]);
+
+      if (existingUserResult.rows.length > 0) {
+          return res.status(400).json({ error: 'User already exists' });
+      }
+
+      // Generate OTP
+      const otp = randomstring.generate({
+          length: 6,
+          charset: 'numeric'
+      });
+
+      // Store OTP with expiration
+      // otpStorage.set(employee_email, {
+      //     otp,
+      //     createdAt: Date.now()
+      // });
+
+      // Send OTP via email
+      await transporter.sendMail({
+        from: "danuja.kowaski@gmail.com",
+        to: employee_email,
+        subject: 'Your Registration OTP for CREWCONNECT',
+        text: `Hi ${employee_fname} ${employee_lname},
+    
+    Your OTP for registration is: ${otp}. 
+    This OTP will expire in 10 minutes.
+    
+    Best regards,
+    CREWCONNECT Team`
+    });
+
+      res.status(200).json({ 
+          message: 'OTP sent successfully', 
+          email: employee_email 
+      });
+
+      
+  } catch (error) {
+      res.status(500).json({
+          success: false,
+          message: "An error occurred while adding the job.",
+          error: error
+      });
+  }
+
+};
+
 module.exports = {
     getEmpAvailableJobs,
-    uploadEmpDetails
+    uploadEmpDetails,
+    registerEmployee
 };

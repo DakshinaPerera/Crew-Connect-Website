@@ -139,9 +139,7 @@ const editJob = async (req, res) => {
 const searchJobs = async (req, res) => {
     try {
       const { job_title, job_description, job_type, job_industry} = req.query;
-      
       const jobs = await pool.query(queries.searchFilter, [`%${job_title}%`, `%${job_description}%`, job_type, job_industry]);
-      console.log(job_title, job_description);
       res.json(jobs.rows);
     } catch (err) {
       console.error(err);
@@ -149,18 +147,42 @@ const searchJobs = async (req, res) => {
     }
   };
 
-  //Change status of job from active -> inactive
+  //Change status of job from active -> inactive or vice versa
   const setJobStatus = async (req, res) => {
     try {
-        const { job_status } = req.query;
+        console.log(req.body);
+        const { job_status } = req.body;
         const id = parseInt(req.params.id);
-        await pool.query(queries.setStatus, [job_status, id]);
-        res.status(200).send("Successfully switched status!");
+
+        // Additional validation
+        if (!job_status) {
+            return res.status(400).json({ error: 'Job status is required' });
+        }
+
+        const results = await pool.query(queries.checkJobExist, [id]);
+        if (!results.rows.length) {
+            return res.status(404).send("Job does not exist in the database!");
+        }
+
+        // Execute status update
+        const updateResult = await pool.query(queries.setStatus, [job_status, id]);
+
+        // Check if any rows were actually updated
+        if (updateResult.rowCount === 0) {
+            return res.status(404).json({ error: 'No job was updated' });
+        }
+
+        const editedData = await pool.query(queries.getJobById, [id]);
+        res.status(200).json(editedData.rows);
+        
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Error switching status' });
+        console.error('Detailed error:', err);
+        res.status(500).json({ 
+            error: 'Error switching status', 
+            details: err.message 
+        });
     }
-  };
+};
 
 module.exports = {
     adminLogin,
