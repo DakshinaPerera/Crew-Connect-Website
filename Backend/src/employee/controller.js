@@ -1,5 +1,15 @@
 const pool = require('../../db'); 
 const queries = require('./queries');
+const nodemailer = require('nodemailer');
+const randomstring = require('randomstring');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+      user: 'danuja.kowaski@gmail.com', 
+      pass: 'hvxq htpa uhwc vpnk'
+  }
+});
 
 const getEmpAvailableJobs = async (req, res) => {
     try {
@@ -14,15 +24,6 @@ const getEmpAvailableJobs = async (req, res) => {
 //Upload employee details
 const uploadEmpDetails = async (req, res) => {
     try { 
-        
-        const transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                        user: 'danuja.kowaski@gmail.com', //change to company email
-                        pass: 'hvxq htpa uhwc vpnk' //change to company email password from app
-                    }
-                });
-
         const { firstName, lastName, email, mobileNumber, address, residentialStatus, preferredJobIndustry, preferredJobs } = req.body;
     
 
@@ -104,18 +105,8 @@ const uploadEmpDetails = async (req, res) => {
 
 const registerEmployee = async (req, res) => {
   try {
-      const transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-              user: 'danuja.kowaski@gmail.com', 
-              pass: 'hvxq htpa uhwc vpnk'
-          }
-      });
-
       const { employee_fname, employee_lname, employee_email } = req.body;
-
       // Check if user already exists
-      
       const existingUserResult = await pool.query(queries.checkEmployeeExist, [employee_email]);
 
       if (existingUserResult.rows.length > 0) {
@@ -127,7 +118,7 @@ const registerEmployee = async (req, res) => {
           length: 6,
           charset: 'numeric'
       });
-
+      console.log("OTP",otp);
       // Store OTP with expiration
       // otpStorage.set(employee_email, {
       //     otp,
@@ -147,6 +138,7 @@ const registerEmployee = async (req, res) => {
     Best regards,
     CREWCONNECT Team`
     });
+    
 
       res.status(200).json({ 
           message: 'OTP sent successfully', 
