@@ -118,7 +118,7 @@ const registerEmployee = async (req, res) => {
           length: 6,
           charset: 'numeric'
       });
-      console.log("OTP",otp);
+      
       // Store OTP with expiration
       // otpStorage.set(employee_email, {
       //     otp,
