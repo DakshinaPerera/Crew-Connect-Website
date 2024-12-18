@@ -3,15 +3,36 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 const ContactUsForm = () => {
-
     const {register, reset, handleSubmit} = useForm();
-
     const [msg, setMsg] = useState<String>();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const dataSubmit = (data: any) => {
-        if (data){
-            setMsg("Thank You For Contacting Us!");
-            reset();
+    const dataSubmit = async (data: any) => {
+        try {
+            setIsSubmitting(true);
+            const response = await fetch('/api/contactus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    cn_name: data.name,
+                    cn_email: data.email,
+                    cn_subject: data.subject,
+                    cn_message: data.message,
+                }),
+            });
+
+            if (response.ok) {
+                setMsg("Thank You For Contacting Us!");
+                reset();
+            } else {
+                setMsg("Something went wrong. Please try again.");
+            }
+        } catch (error) {
+            setMsg("An error occurred. Please try again.");
+        } finally {
+            setIsSubmitting(false);
         }
     }
   return (
