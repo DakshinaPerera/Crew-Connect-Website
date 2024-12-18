@@ -150,7 +150,8 @@ const searchJobs = async (req, res) => {
   //Change status of job from active -> inactive or vice versa
   const setJobStatus = async (req, res) => {
     try {
-        console.log(req.body);
+        
+
         const { status } = req.body;
         const id = parseInt(req.params.id);
 

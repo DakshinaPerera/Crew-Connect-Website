@@ -5,6 +5,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    console.log('de',params.id)
     const response = await fetch(`http://localhost:4500/api/v1/admin/deletejob/${params.id}`, {
       method: 'DELETE',
       headers: {
