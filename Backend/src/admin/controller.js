@@ -151,11 +151,11 @@ const searchJobs = async (req, res) => {
   const setJobStatus = async (req, res) => {
     try {
         console.log(req.body);
-        const { job_status } = req.body;
+        const { status } = req.body;
         const id = parseInt(req.params.id);
 
         // Additional validation
-        if (!job_status) {
+        if (!status) {
             return res.status(400).json({ error: 'Job status is required' });
         }
 
@@ -165,7 +165,7 @@ const searchJobs = async (req, res) => {
         }
 
         // Execute status update
-        const updateResult = await pool.query(queries.setStatus, [job_status, id]);
+        const updateResult = await pool.query(queries.setStatus, [status, id]);
 
         // Check if any rows were actually updated
         if (updateResult.rowCount === 0) {
