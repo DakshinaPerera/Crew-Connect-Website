@@ -1,5 +1,12 @@
 'use client';
-import React, { useState } from 'react'
+import Script from 'next/script';
+import React, { useState, useEffect } from 'react'
+
+declare global {
+    interface Window {
+        grecaptcha: any;
+    }
+}
 
 const page = () => {
   const [formData, setFormData] = useState({
@@ -27,67 +34,84 @@ const page = () => {
     return '';
   };
 
-// postjob.tsx
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  
-  const phoneError = validatePhoneNumber(formData.phoneNumber);
-  
-  if (phoneError) {
-    setErrors(prev => ({
-      ...prev,
-      phoneNumber: phoneError
-    }));
-    return;
-  }
+  useEffect(() => {
+    // Load reCAPTCHA script
+    const loadReCaptcha = async () => {
+      if (typeof window.grecaptcha === 'undefined') {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+    };
+    loadReCaptcha();
+  }, []);
 
-  setErrors({
-    phoneNumber: ''
-  });
-
-  try {
-    setIsSubmitting(true);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     
-    const response = await fetch('/api/employer/postjob', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to post job');
+    const phoneError = validatePhoneNumber(formData.phoneNumber);
+    
+    if (phoneError) {
+      setErrors(prev => ({
+        ...prev,
+        phoneNumber: phoneError
+      }));
+      return;
     }
 
-    // Reset form
-    setFormData({
-      fullName: '',
-      workEmail: '',
-      phoneNumber: '',
-      companyName: '',
-      jobIndustry: '',
-      jobType: '',
-      jobLocation: '',
-      salary: '',
-      jobDescription: ''
+    setErrors({
+      phoneNumber: ''
     });
 
-    alert(data.message || 'Job posted successfully!');
-    
-  } catch (error: unknown) {
-    console.error('Error submitting form:', error);
-    if (error instanceof Error) {
-      alert(error.message);
-    } else {
-      alert('Failed to post job. Please try again.');
+    try {
+      setIsSubmitting(true);
+
+      // Execute reCAPTCHA and get token
+      const token = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY, {
+        action: 'post_job'
+      });
+      
+      const response = await fetch('/api/employer/postjob', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          recaptchaToken: token
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to post job');
+      }
+
+      // Reset form
+      setFormData({
+        fullName: '',
+        workEmail: '',
+        phoneNumber: '',
+        companyName: '',
+        jobIndustry: '',
+        jobType: '',
+        jobLocation: '',
+        salary: '',
+        jobDescription: ''
+      });
+
+      alert(data.message || 'Job posted successfully!');
+      
+    } catch (error: unknown) {
+      console.error('Error submitting form:', error);
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('Failed to post job. Please try again.');
+      }
+    } finally {
+      setIsSubmitting(false);
     }
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -107,6 +131,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
   return (
     <main>
+      <Script src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}`} />
       <div className="bg-primary flex flex-col lg:flex-row mt-[60px] px-8 items-center justify-between relative overflow-hidden">
 
         <div className="w-full min-h-screen flex items-center justify-center p-4">
