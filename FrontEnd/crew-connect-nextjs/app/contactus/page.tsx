@@ -2,9 +2,11 @@ import React from 'react'
 import Image  from 'next/image'
 import backgroundImage from "public/images/image 21.png"
 import ContactUsForm from '../components/ContactUsForm'
+import Script from 'next/script'
 const page = () => {
   return (
     <div>
+      <Script src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}`} />
       <div className="w-full h-[50px] border  border-white"></div>
       {/* Top container - hidden on mobile screens */}
       <div className="w-full h-[500px] hidden md:block relative">

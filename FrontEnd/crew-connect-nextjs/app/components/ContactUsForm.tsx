@@ -1,15 +1,37 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+
+declare global {
+    interface Window {
+        grecaptcha: any;
+    }
+}
 
 const ContactUsForm = () => {
     const {register, reset, handleSubmit} = useForm();
     const [msg, setMsg] = useState<String>();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    useEffect(() => {
+        // Load reCAPTCHA script
+        const loadReCaptcha = async () => {
+            if (typeof window.grecaptcha === 'undefined') {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+        };
+        loadReCaptcha();
+    }, []);
+
     const dataSubmit = async (data: any) => {
         try {
             setIsSubmitting(true);
+            
+            // Execute reCAPTCHA and get token
+            const token = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY, {
+                action: 'contact_form'
+            });
+
             const response = await fetch('/api/contactus', {
                 method: 'POST',
                 headers: {
@@ -20,6 +42,7 @@ const ContactUsForm = () => {
                     cn_email: data.email,
                     cn_subject: data.subject,
                     cn_message: data.message,
+                    recaptchaToken: token,
                 }),
             });
 
