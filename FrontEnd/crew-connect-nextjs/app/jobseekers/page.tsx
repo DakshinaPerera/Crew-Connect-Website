@@ -1,5 +1,6 @@
 'use client';
 
+import Script from 'next/script';
 import React, { useState } from 'react'
 
 const Page = () => {
@@ -191,6 +192,7 @@ const Page = () => {
 
   return (
     <main>
+      <Script src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}`} />
       <div className="bg-primary flex flex-col lg:flex-row mt-[60px] px-8 items-center justify-between relative overflow-hidden">
         <div className="w-full min-h-screen flex items-center justify-center p-4">
           <div className="bg-[#D9D9D9] rounded-lg p-8 w-full max-w-2xl shadow-lg">
