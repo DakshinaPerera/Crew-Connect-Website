@@ -47,7 +47,7 @@ const WhyEmployersSection = () => {
             </h2>
             <BasicButton
               href="/employers"
-              title="Post for Job"
+              title="Post a Job"
               className="w-[180px]"
             />
           </div>

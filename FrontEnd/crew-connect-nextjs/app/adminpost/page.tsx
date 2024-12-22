@@ -5,6 +5,7 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import Image from 'next/image';
 import BackArrow from '/public/images/back_arrow.png';
 
+
 const Page = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +21,7 @@ const Page = () => {
     company_email: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
@@ -34,7 +35,7 @@ const Page = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/jobs', {
+      const response = await fetch('/api/jobs/admin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +100,7 @@ const Page = () => {
             </Link>
 
             <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-              Register to CrewConnect
+              Upload a Job
             </h1>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -175,16 +176,19 @@ const Page = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Job Type (Eg: Full-Time, Part-Time)
+                  Job Type
                 </label>
-                <input
-                  type="text"
+                <select
                   name="job_type"
                   value={formData.job_type}
                   onChange={handleChange}
                   className="w-full p-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
-                />
+                >
+                  <option value="">Select Job Type</option>
+                  <option value="Full-Time">Full-Time</option>
+                  <option value="Part-Time">Part-Time</option>
+                </select>
               </div>
 
               <div>

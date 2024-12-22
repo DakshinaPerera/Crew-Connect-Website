@@ -34,7 +34,7 @@ export default function SearchForm({ onSearch, className = '' }: SearchFormProps
 
   return (
     <div
-      className={`w-full max-w-6xl bg-white rounded-lg shadow-xl px-4 py-2 ${className}`}
+      className={`w-full  bg-white rounded-lg shadow-2xl border-2 px-4 py-2 ${className}`}
     >
       {isMobile ? (
         // Mobile Search Form
