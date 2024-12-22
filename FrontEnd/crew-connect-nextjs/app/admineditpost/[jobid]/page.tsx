@@ -44,7 +44,7 @@ export default function EditJobPage() {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const response = await fetch('/api/jobs');
+        const response = await fetch('/api/jobs/admin');
         if (!response.ok) {
           throw new Error('Failed to fetch jobs');
         }
@@ -78,13 +78,15 @@ export default function EditJobPage() {
     }
   }, [jobId]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
       [name]: value
     }));
   };
+
+  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -231,15 +233,19 @@ export default function EditJobPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Job Type
                 </label>
-                <input
-                  type="text"
+                <select
                   name="job_type"
-                  value={formData.job_type}
+                  value={formData.job_type || ''} // This ensures the original value is selected
                   onChange={handleChange}
                   className="w-full p-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
-                />
+                >
+                  <option value=""disabled>Select Job Type</option>
+                  <option value="Full-Time" selected={formData.job_type === 'Full-Time'}>Full-Time</option>
+                  <option value="Part-Time" selected={formData.job_type === 'Part-Time'}>Part-Time</option>
+                </select>
               </div>
+              
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
