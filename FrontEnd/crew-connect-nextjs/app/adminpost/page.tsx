@@ -4,6 +4,7 @@ import Link from 'next/link';
 import ProtectedRoute from '../components/ProtectedRoute';
 import Image from 'next/image';
 import BackArrow from '/public/images/back_arrow.png';
+import Toast from '../components/Toast';
 
 
 const Page = () => {
@@ -20,6 +21,15 @@ const Page = () => {
     company_number: '',
     company_email: '',
   });
+  const [toastState, setToastState] = useState<{
+    message: string;
+    isVisible: boolean;
+    type: 'loading' | 'success' | 'error';
+  }>({
+    message: '',
+    isVisible: false,
+    type: 'loading'
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -34,6 +44,12 @@ const Page = () => {
     setSuccessMessage(null);
     setError(null);
 
+    setToastState({
+      message: 'Posting job...',
+      isVisible: true,
+      type: 'loading'
+    });
+
     try {
       const response = await fetch('/api/jobs/admin', {
         method: 'POST',
@@ -45,6 +61,11 @@ const Page = () => {
 
       if (response.ok) {
         setSuccessMessage('Job posted successfully!');
+        setToastState({
+          message: 'Job posted successfully!',
+          isVisible: true,
+          type: 'success'
+        });
         // Reset form
         setFormData({
           job_title: '',
@@ -59,15 +80,31 @@ const Page = () => {
         });
       } else {
         throw new Error('Failed to post job');
+        setToastState({
+          message: 'Failed to post job',
+          isVisible: true,
+          type: 'error'
+        });
       }
     } catch (error) {
       console.error('Error posting job:', error);
+      setToastState({
+        message: 'Error posting job:' + error,
+        isVisible: true,
+        type: 'error'
+      });
       setError(error instanceof Error ? error.message : 'Failed to post job');
     }
   }
 
   return (
     <ProtectedRoute>
+      <Toast
+        message={toastState.message}
+        isVisible={toastState.isVisible}
+        type={toastState.type}
+        onClose={() => setToastState(prev => ({ ...prev, isVisible: false }))}
+      />
       <div className="bg-primary flex flex-col lg:flex-row mt-[60px] px-8 items-center justify-between relative overflow-hidden">
         <div className="w-full min-h-screen flex items-center justify-center p-4">
           <div className="bg-gray-100 rounded-lg p-8 w-full max-w-2xl shadow-lg relative">
@@ -188,6 +225,8 @@ const Page = () => {
                   <option value="">Select Job Type</option>
                   <option value="Full-Time">Full-Time</option>
                   <option value="Part-Time">Part-Time</option>
+                  <option value="Contract/Temp">Contract/Temp</option>
+                  <option value="Casual/Vacation">Casual/Vacation</option>
                 </select>
               </div>
 
