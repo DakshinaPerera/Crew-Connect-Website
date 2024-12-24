@@ -1,14 +1,16 @@
 'use client';
 import Script from 'next/script';
 import React, { useState, useEffect } from 'react'
+import Toast from '../components/Toast';
 
 declare global {
-    interface Window {
-        grecaptcha: any;
-    }
+  interface Window {
+    grecaptcha: any;
+  }
 }
 
 const page = () => {
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     fullName: '',
     workEmail: '',
@@ -19,10 +21,19 @@ const page = () => {
     jobLocation: '',
     salary: '',
     jobDescription: ''
-  })
-
+  });
+  const [toastState, setToastState] = useState<{
+    message: string;
+    isVisible: boolean;
+    type: 'loading' | 'success' | 'error';
+  }>({
+    message: '',
+    isVisible: false,
+    type: 'loading'
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState({
+  const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState({
     phoneNumber: ''
   });
 
@@ -46,18 +57,27 @@ const page = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+    setSuccessMessage(null);
+    setError(null);
+
+    // Show loading toast
+    setToastState({
+      message: 'Posting job...',
+      isVisible: true,
+      type: 'loading'
+    });
+
     const phoneError = validatePhoneNumber(formData.phoneNumber);
-    
+
     if (phoneError) {
-      setErrors(prev => ({
+      setFieldErrors(prev => ({
         ...prev,
         phoneNumber: phoneError
       }));
       return;
     }
 
-    setErrors({
+    setFieldErrors({
       phoneNumber: ''
     });
 
@@ -68,7 +88,12 @@ const page = () => {
       const token = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY, {
         action: 'post_job'
       });
-      
+      setToastState({
+        message: 'Submitting your job posting...',
+        isVisible: true,
+        type: 'loading'
+      });
+
       const response = await fetch('/api/employer/postjob', {
         method: 'POST',
         headers: {
@@ -83,7 +108,12 @@ const page = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to post job');
+        setSuccessMessage(data.message || 'Failed to post job');
+        setToastState({
+          message: data.message || 'Failed to post job',
+          isVisible: true,
+          type: 'error'
+        });
       }
 
       // Reset form
@@ -99,21 +129,27 @@ const page = () => {
         jobDescription: ''
       });
 
-      alert(data.message || 'Job posted successfully!');
-      
+      setSuccessMessage(data.message || 'Job posted successfully!');
+      setToastState({
+        message: 'Job posted successfully!',
+        isVisible: true,
+        type: 'success'
+      });
+
     } catch (error: unknown) {
-      console.error('Error submitting form:', error);
-      if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        alert('Failed to post job. Please try again.');
-      }
+      const errorMessage = error instanceof Error ? error.message : 'Failed to post job. Please try again.';
+      setToastState({
+        message: errorMessage,
+        isVisible: true,
+        type: 'error'
+      });
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prevState => ({
       ...prevState,
@@ -122,16 +158,24 @@ const page = () => {
 
     // Clear error when user starts typing
     if (name === 'phoneNumber') {
-      setErrors(prev => ({
+      setFieldErrors(prev => ({
         ...prev,
         phoneNumber: ''
       }))
     }
+
+    setToastState(prev => ({ ...prev, isVisible: false }));
   }
 
   return (
     <main>
       <Script src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}`} />
+      <Toast 
+      message={toastState.message}
+      isVisible={toastState.isVisible}
+      type={toastState.type}
+      onClose={() => setToastState(prev => ({ ...prev, isVisible: false }))}
+    />
       <div className="bg-primary flex flex-col lg:flex-row mt-[60px] px-8 items-center justify-between relative overflow-hidden">
 
         <div className="w-full min-h-screen flex items-center justify-center p-4">
@@ -179,12 +223,12 @@ const page = () => {
                   name="phoneNumber"
                   value={formData.phoneNumber}
                   onChange={handleChange}
-                  className={`w-full p-2 border ${errors.phoneNumber ? 'border-red-500' : 'border-gray-400'} rounded focus:outline-none focus:ring-2 ${errors.phoneNumber ? 'focus:ring-red-500' : 'focus:ring-blue-500'}`}
+                  className={`w-full p-2 border ${fieldErrors.phoneNumber ? 'border-red-500' : 'border-gray-400'} rounded focus:outline-none focus:ring-2 ${fieldErrors.phoneNumber ? 'focus:ring-red-500' : 'focus:ring-blue-500'}`}
                   required
                   placeholder="Enter your phone number"
                 />
-                {errors.phoneNumber && (
-                  <p className="text-red-500 text-sm mt-1">{errors.phoneNumber}</p>
+                {fieldErrors.phoneNumber && (
+                  <p className="text-red-500 text-sm mt-1">{fieldErrors.phoneNumber}</p>
                 )}
               </div>
 
@@ -218,17 +262,23 @@ const page = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Job Type (Eg: Part time)
+                  Job Type
                 </label>
-                <input
-                  type="text"
+                <select
                   name="jobType"
                   value={formData.jobType}
                   onChange={handleChange}
                   className="w-full p-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
-                />
+                >
+                  <option value="">Select a job type</option>
+                  <option value="Part Time">Part Time</option>
+                  <option value="Full Time">Full Time</option>
+                  <option value="Contract/Temp">Contract/Temp</option>
+                  <option value="Casual/Vacation">Casual/Vacation</option>
+                </select>
               </div>
+
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -271,13 +321,23 @@ const page = () => {
                 />
               </div>
 
-              <div className="flex justify-center mt-6">
+              <div className="flex flex-col items-center mt-6 space-y-3">
                 <button
                   type="submit"
                   className="bg-[#0a192f] text-white px-6 py-2 rounded hover:bg-[#112a45] transition-colors duration-300"
                 >
                   Post Your Job
                 </button>
+                {successMessage && (
+                  <div className="text-green-600 text-sm font-medium bg-green-50 px-4 py-2 rounded-full animate-fadeIn">
+                    {successMessage}
+                  </div>
+                )}
+                {error && (
+                  <div className="text-red-600 text-sm font-medium bg-red-50 px-4 py-2 rounded-full animate-fadeIn">
+                    {error}
+                  </div>
+                )}
               </div>
             </form>
           </div>
