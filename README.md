@@ -5,3 +5,5 @@ CrewConnect is an Australian based recruitment platform designed to find Austral
 # Packages to install to get project runnin
 Backend : 
 npm i randomstring, express, pool
+
+Live test page- https://test-connect-fe.vercel.app/ 
